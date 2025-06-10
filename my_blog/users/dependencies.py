@@ -1,15 +1,16 @@
 from datetime import datetime
 
+from fastapi import Depends, Request
+from jose import JWTError, jwt
+
 from my_blog.config import settings
+from my_blog.users.dao import UserDAO
 from my_blog.users.exceptions import (
     IncorrectTokenFormatException,
     TokenAbsentException,
     TokenExpiredException,
     UserIsNotPresentException,
 )
-from fastapi import Depends, Request
-from jose import JWTError, jwt
-from my_blog.users.dao import UserDAO
 
 
 def get_token(request: Request):

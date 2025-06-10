@@ -14,8 +14,7 @@ async def add_post(
     user: User = Depends(get_current_user)
 ):
     await PostDAO.add_post(
-        user_id=user.user_id,
-        tag_id=post.tag_id,
+        user_id=user.id,
         title=post.title,
         description=post.description
     )

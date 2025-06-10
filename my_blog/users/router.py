@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Response
 
-from my_blog.users.exceptions import (
-    IncorrectEmailOrPasswordException,
-    UserAlreadyExistsException,
-)
 from my_blog.users.auth import (
     authenticate_user,
     create_access_token,
     get_password_hash,
 )
 from my_blog.users.dao import UserDAO
+from my_blog.users.exceptions import (
+    IncorrectEmailOrPasswordException,
+    UserAlreadyExistsException,
+)
 from my_blog.users.schemas import SUser
 
 router = APIRouter(
@@ -24,7 +24,7 @@ async def register_user(user_data: SUser):
         raise UserAlreadyExistsException
     hashed_password = get_password_hash(user_data.password)
     await UserDAO.add(
-        name=user_data.name,
+        username=user_data.username,
         email=user_data.email,
         hashed_password=hashed_password
     )

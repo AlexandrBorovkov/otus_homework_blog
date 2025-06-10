@@ -10,7 +10,7 @@ class Post(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    tag_id = Column(Integer, ForeignKey("tags.id"), nullable=False)
+    # tag_id = Column(Integer, ForeignKey("tags.id"), nullable=False)
     title = Column(String, unique=True, nullable=False)
     description = Column(String, nullable=False)
     time_created = Column(DateTime(timezone=True), server_default=func.now())
