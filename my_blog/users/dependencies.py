@@ -1,7 +1,7 @@
 from datetime import datetime
 
-from config import settings
-from exceptions import (
+from my_blog.config import settings
+from my_blog.users.exceptions import (
     IncorrectTokenFormatException,
     TokenAbsentException,
     TokenExpiredException,
@@ -9,7 +9,7 @@ from exceptions import (
 )
 from fastapi import Depends, Request
 from jose import JWTError, jwt
-from users.dao import UserDAO
+from my_blog.users.dao import UserDAO
 
 
 def get_token(request: Request):

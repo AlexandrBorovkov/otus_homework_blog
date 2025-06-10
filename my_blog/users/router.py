@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response
 
-from my_blog.exceptions import (
+from my_blog.users.exceptions import (
     IncorrectEmailOrPasswordException,
     UserAlreadyExistsException,
 )
