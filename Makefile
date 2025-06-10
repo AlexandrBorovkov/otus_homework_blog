@@ -1,8 +1,10 @@
+PORT ?= 8000
+
 install:
 	uv sync
 
-start:
-	uv run my_blog
-
 lint:
 	uv run ruff check
+
+start:
+	uv run uvicorn my_blog:app --host 0.0.0.0 --port $(PORT) --reload

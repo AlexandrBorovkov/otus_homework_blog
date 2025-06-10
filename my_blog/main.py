@@ -4,7 +4,7 @@
 from my_blog.database import Base, engine, session_maker
 from my_blog.models.post import Post
 from my_blog.models.tag import Tag
-from my_blog.models.user import User
+from my_blog.users.models import User
 
 
 def create_table():

@@ -1,0 +1,13 @@
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+
+from my_blog.users.router import router as router_users
+
+app = FastAPI()
+app.include_router(router_users)
+templates = Jinja2Templates(directory="my_blog/templates")
+
+
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
