@@ -7,6 +7,7 @@ from alembic import context
 from my_blog.database import DATABASE_URL, Base
 from my_blog.users.models import User
 from my_blog.posts.models import Post
+from my_blog.tags.models import Tag
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

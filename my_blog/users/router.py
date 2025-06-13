@@ -7,8 +7,9 @@ from my_blog.users.auth import (
 )
 from my_blog.users.dao import UserDAO
 from my_blog.users.exceptions import (
+    EmailAlreadyExistsException,
     IncorrectEmailOrPasswordException,
-    UserAlreadyExistsException,
+    UsernamelAlreadyExistsException,
 )
 from my_blog.users.schemas import SUser
 
@@ -21,7 +22,10 @@ router = APIRouter(
 async def register_user(user_data: SUser):
     existing_user = await UserDAO.find_one_or_none(email=user_data.email)
     if existing_user:
-        raise UserAlreadyExistsException
+        raise EmailAlreadyExistsException
+    existing_user = await UserDAO.find_one_or_none(username=user_data.username)
+    if existing_user:
+        raise UsernamelAlreadyExistsException
     hashed_password = get_password_hash(user_data.password)
     await UserDAO.add(
         username=user_data.username,

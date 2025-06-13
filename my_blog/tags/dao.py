@@ -2,40 +2,44 @@ from sqlalchemy import insert, select
 
 from my_blog.database import async_session_maker
 from my_blog.posts.exceptions import (
-    PostAlreadyExistsException,
-    PostWasNotFoundException,
     RestrictionOnDeletingPostException,
     RestrictionOnUpdatingPostException,
 )
 from my_blog.posts.models import Post
+from my_blog.tags.exceptions import (
+    TagAlreadyExistsException,
+    TagWasNotFoundException,
+    TheTagIsUsedException,
+)
+from my_blog.tags.models import Tag
 
 
-class PostDAO:
+class TagDAO:
 
-    model = Post
+    model = Tag
 
     @classmethod
-    async def add_post(cls, **data):
+    async def add_tag(cls, **data):
         async with async_session_maker() as session:
-            active_post_query = select(cls.model).filter(
-                cls.model.title == data["title"]
+            active_tag_query = select(cls.model).filter(
+                cls.model.name == data["name"]
             )
-            active_post = await session.execute(active_post_query)
-            active_post = active_post.scalar_one_or_none()
-            if active_post:
-                raise PostAlreadyExistsException
+            active_tag = await session.execute(active_tag_query)
+            active_tag = active_tag.scalar_one_or_none()
+            if active_tag:
+                raise TagAlreadyExistsException
             query = insert(cls.model).values(**data)
             await session.execute(query)
             await session.commit()
 
     @classmethod
-    async def update_post(cls, post_id: int, user_id: int, **data):
+    async def update_tag(cls, tag_id: int, user_id: int, **data):
         async with async_session_maker() as session:
-            query = select(cls.model).filter(cls.model.id == post_id)
+            query = select(cls.model).filter(cls.model.id == tag_id)
             row = await session.execute(query)
             row = row.scalar_one_or_none()
             if row is None:
-                raise PostWasNotFoundException
+                raise TagWasNotFoundException
             if row.user_id != user_id:
                 raise RestrictionOnUpdatingPostException
             for key, value in data.items():
@@ -43,30 +47,35 @@ class PostDAO:
             await session.commit()
 
     @classmethod
-    async def delete_post(cls, post_id: int, user_id: int):
+    async def delete_tag(cls, tag_id: int, user_id: int):
         async with async_session_maker() as session:
-            query = select(cls.model).filter(cls.model.id == post_id)
+            posts_query = select(Post).filter(Post.tag_id == tag_id)
+            posts_result = await session.execute(posts_query)
+            if posts_result.scalars().first():
+                raise TheTagIsUsedException
+
+            query = select(cls.model).filter(cls.model.id == tag_id)
             row = await session.execute(query)
             row = row.scalar_one_or_none()
             if row is None:
-                raise PostWasNotFoundException
+                raise TagWasNotFoundException
             if row.user_id != user_id:
                 raise RestrictionOnDeletingPostException
             await session.delete(row)
             await session.commit()
 
     @classmethod
-    async def show_post(cls, post_id: int):
+    async def show_tag(cls, tag_id: int):
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(id=post_id)
+            query = select(cls.model).filter_by(id=tag_id)
             row = await session.execute(query)
             row = row.scalar_one_or_none()
             if row is None:
-                raise PostWasNotFoundException
+                raise TagWasNotFoundException
             return row
 
     @classmethod
-    async def get_posts(cls):
+    async def get_tags(cls):
         async with async_session_maker() as session:
             query = select(cls.model)
             result = await session.execute(query)

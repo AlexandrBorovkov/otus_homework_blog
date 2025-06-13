@@ -15,6 +15,7 @@ async def add_post(
 ):
     await PostDAO.add_post(
         user_id=user.id,
+        tag_id=post.tag_id,
         title=post.title,
         description=post.description
     )
@@ -27,6 +28,7 @@ async def update_post(
 ):
     await PostDAO.update_post(
         post_id,
+        user_id=user.id,
         title=post.title,
         description=post.description
     )
@@ -36,7 +38,7 @@ async def delete_post(
     post_id: int,
     user: User = Depends(get_current_user)
 ):
-    await PostDAO.delete_post(post_id)
+    await PostDAO.delete_post(post_id, user.id)
 
 @router.get("/show_post")
 async def show_post(

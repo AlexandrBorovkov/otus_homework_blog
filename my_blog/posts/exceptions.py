@@ -14,3 +14,11 @@ class PostAlreadyExistsException(PostException):
 class PostWasNotFoundException(PostException):
     status_code=status.HTTP_409_CONFLICT
     detail="Такой пост не найден"
+
+class RestrictionOnUpdatingPostException(PostException):
+    status_code=status.HTTP_409_CONFLICT
+    detail="У вас нет прав на обновление"
+
+class RestrictionOnDeletingPostException(PostException):
+    status_code=status.HTTP_409_CONFLICT
+    detail="У вас нет прав на удаление"

@@ -13,3 +13,4 @@ class User(Base):
     hashed_password = Column(String, nullable=False)
 
     posts = relationship("Post", back_populates="users")
+    tags = relationship("Tag", back_populates="users")

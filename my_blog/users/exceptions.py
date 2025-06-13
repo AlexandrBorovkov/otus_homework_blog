@@ -7,9 +7,13 @@ class UserException(HTTPException):
     def __init__(self):
         super().__init__(status_code=self.status_code, detail=self.detail)
 
-class UserAlreadyExistsException(UserException):
+class EmailAlreadyExistsException(UserException):
     status_code=status.HTTP_409_CONFLICT
-    detail="Пользователь уже существует"
+    detail="Email уже существует"
+
+class UsernamelAlreadyExistsException(UserException):
+    status_code=status.HTTP_409_CONFLICT
+    detail="Username уже существует"
 
 class IncorrectEmailOrPasswordException(UserException):
     status_code=status.HTTP_401_UNAUTHORIZED
