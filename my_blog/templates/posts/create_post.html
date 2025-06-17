@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form method="POST" action="/posts/add_post">
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Заголовок</label>
+      <input type="title" class="form-control" name="title" placeholder="Заголовок" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Содержание</label>
+      <input type="description" class="form-control" name="description" placeholder="Содержание" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="tagSelect" class="form-label">Выберите тег</label>
+        <select class="form-select" id="tagSelect" name="tag_id" required>
+          <option value="" selected disabled>-- Выберите тег --</option>
+          {% for tag in tags %}
+            <option value="{{ tag.id }}">{{ tag.name }}</option>
+          {% endfor %}
+        </select>
+    </div>
+      
+
+    <button type="submit" class="btn btn-primary">Создать пост</button>
+  </form>
+{% endblock %}

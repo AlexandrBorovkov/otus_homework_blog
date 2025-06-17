@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form method="POST" action="/posts/update_post/{{ post.id }}">
+
+    <div class="mb-3">
+      <label for="title" class="form-label">Заголовок</label>
+      <input type="text" class="form-control" name="title" value="{{ post.title }}" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="description" class="form-label">Содержание</label>
+      <textarea class="form-control" name="description" required>{{ post.description }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label for="tagSelect" class="form-label">Выберите тег</label>
+        <select class="form-select" id="tagSelect" name="tag_id" required>
+          {% for tag in tags %}
+            <option value="{{ tag.id }}" {% if tag.id == post.tag_id %}selected{% endif %}>{{ tag.name }}</option>
+          {% endfor %}
+        </select>
+    </div>
+      
+    <button type="submit" class="btn btn-primary">Обновить пост</button>
+  </form>
+{% endblock %}
