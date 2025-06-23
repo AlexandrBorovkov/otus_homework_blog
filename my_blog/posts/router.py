@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request, Form
+from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import RedirectResponse
 
 from my_blog.posts.dao import PostDAO
@@ -17,7 +17,10 @@ async def show_create_post_form(
     user: User = Depends(get_current_user)
 ):
     tags = await TagDAO.get_tags()
-    return templates.TemplateResponse("posts/create_post.html", {"request": request, "tags": tags})
+    return templates.TemplateResponse(
+        "posts/create_post.html",
+        {"request": request, "tags": tags}
+    )
 
 @router.post("/add_post")
 async def add_post(
@@ -26,7 +29,6 @@ async def add_post(
     description: str = Form(...),
     user: User = Depends(get_current_user)
 ):
-    print(tag_id, title, description, user.id)
     await PostDAO.add_post(
         user_id=user.id,
         tag_id=tag_id,
@@ -80,12 +82,18 @@ async def show_post(
     user: User = Depends(get_current_user)
 ):
     result = await PostDAO.show_post(post_id)
-    return templates.TemplateResponse("posts/show_program.html", {"request": request, "post": result, "current_user": user})
+    return templates.TemplateResponse(
+        "posts/show_program.html",
+        {"request": request, "post": result, "current_user": user}
+    )
 
 @router.get("/all_posts")
 async def get_posts(request: Request):
     result = await PostDAO.get_posts()
-    return templates.TemplateResponse("posts/training_programs.html", {"request": request, "posts": result})
+    return templates.TemplateResponse(
+        "posts/training_programs.html",
+        {"request": request, "posts": result}
+    )
 
 @router.get("/posts_by_tags/{tag_id}")
 async def get_posts_by_tags(
@@ -94,4 +102,7 @@ async def get_posts_by_tags(
     user: User = Depends(get_current_user)
 ):
     result = await PostDAO.get_posts_by_tags(tag_id)
-    return templates.TemplateResponse("posts/training_programs.html", {"request": request, "posts": result})
+    return templates.TemplateResponse(
+        "posts/training_programs.html",
+        {"request": request, "posts": result}
+    )

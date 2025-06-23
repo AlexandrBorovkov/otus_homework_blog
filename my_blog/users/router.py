@@ -22,7 +22,10 @@ router = APIRouter(
 
 @router.get("/register")
 async def show_register_form(request: Request):
-    return templates.TemplateResponse("auth/register.html", {"request": request})
+    return templates.TemplateResponse(
+        "auth/register.html",
+        {"request": request}
+    )
 
 @router.post("/register")
 async def register_user(

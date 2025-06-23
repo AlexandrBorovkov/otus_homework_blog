@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <form method="POST" action="/tags/add_tag">
+
+    <div class="mb-3">
+      <label for="name" class="form-label">Название тега</label>
+      <input type="name" class="form-control" name="name" placeholder="Название тега" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Создать тег</button>
+  </form>
+  <br>
+  {% for tag in tags %}
+
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <h4>{{ tag.name }}</h4>
+
+      {% if tag.user_id == current_user.id %}
+      <div class="post-actions">
+        <a href="/tags/update_tag/{{ tag.id }}" class="btn btn-primary">Редактировать</a>
+      
+        <form method="POST" action="/tags/delete_tag" style="display: inline;">
+          <input type="hidden" name="tag_id" value="{{ tag.id }}">
+          <button type="submit" class="btn btn-danger" 
+                onclick="return confirm('Вы уверены?')">Удалить</button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+    <br>
+ {% endfor %}
+{% endblock %}

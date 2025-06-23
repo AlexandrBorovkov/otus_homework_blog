@@ -59,7 +59,11 @@ class PostDAO:
     @classmethod
     async def show_post(cls, post_id: int):
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(id=post_id).options(joinedload(cls.model.tags))
+            query = (
+                select(cls.model)
+                .filter_by(id=post_id)
+                .options(joinedload(cls.model.tags))
+            )
             row = await session.execute(query)
             row = row.scalar_one_or_none()
             if row is None:
@@ -76,6 +80,10 @@ class PostDAO:
     @classmethod
     async def get_posts_by_tags(cls, tag_id: int):
         async with async_session_maker() as session:
-            query = select(cls.model).filter_by(tag_id=tag_id).options(joinedload(cls.model.tags))
+            query = (
+                select(cls.model)
+                .filter_by(tag_id=tag_id)
+                .options(joinedload(cls.model.tags))
+            )
             result = await session.execute(query)
             return result.scalars().all()
